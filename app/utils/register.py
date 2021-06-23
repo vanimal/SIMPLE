@@ -20,6 +20,9 @@ def get_environment(env_name):
         elif env_name in ('frouge'):
             from frouge.envs.frouge import FlammeRougeEnv
             return FlammeRougeEnv
+        elif env_name in ('cantstop'):
+            from cantstop.envs.cantstop import CantStopEnv
+            return CantStopEnv
         else:
             raise Exception(f'No environment found for {env_name}')
     except SyntaxError as e:
@@ -27,7 +30,7 @@ def get_environment(env_name):
         raise Exception(f'Syntax Error for {env_name}!')
     except:
         raise Exception(f'Install the environment first using: \nbash scripts/install_env.sh {env_name}\nAlso ensure the environment is added to /utils/register.py')
-    
+
 
 
 def get_network_arch(env_name):
@@ -48,6 +51,9 @@ def get_network_arch(env_name):
         return CustomPolicy
     elif env_name in ('frouge'):
         from models.frouge.models import CustomPolicy
+        return CustomPolicy
+    elif env_name in ('cantstop'):
+        from models.cantstop.models import CustomPolicy
         return CustomPolicy
     else:
         raise Exception(f'No model architectures found for {env_name}')
