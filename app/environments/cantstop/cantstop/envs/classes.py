@@ -1,4 +1,5 @@
 import itertools
+import re
 import secrets
 
 class Game:
@@ -65,7 +66,28 @@ class Game:
     return len([c for c in self.board if c.active]) < 3
 
   def __str__(self):
-    return '\n'.join([f'{i+2:2}: {str(c).center(13)}' for i, c in enumerate(self.board)])
+    row_nums = [f'{i+2:2}: ' for i in range(11)]
+    board = [self._colorize(str(c).center(13)) for c in self.board]
+
+    if self.dice is None:
+      moves = ['Moves', '0) Roll', '1) Pass']
+      info = [''] * 8 + moves
+    else:
+      dice = ['Dice', ' '.join([chr(9855 + d) for d in self.dice])]
+      moves = ['Moves'] + [f'{i + 2}) {self._sums(move)}' for i, move in enumerate(self.moves) if self.moveValid[i]]
+      info = [''] * (8 - len(moves)) + dice + [''] + moves
+
+    return '\n'.join(map(lambda r: r[0] + r[1] + '\t' + r[2], zip(row_nums, board, info)))
+
+  def _colorize(self, line):
+    return re.sub(r'[01T]', self._colorizeValue, line)
+
+  def _colorizeValue(self, match):
+    value = match[0]
+    index = self.currentPlayer if value == 'T' else int(value)
+    return f'{self.colors[index]}{value}\033[0m'
+
+  colors = ['\033[91m', '\033[94m']
 
 class Column:
   def __init__(self, height):

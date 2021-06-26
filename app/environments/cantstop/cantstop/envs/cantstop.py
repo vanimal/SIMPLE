@@ -92,7 +92,3 @@ class CantStopEnv(gym.Env):
 
     if (self.game.winner is not None):
       logger.debug(f'Player {self.game.winner} wins.')
-    elif (self.game.dice is None):
-      logger.debug('0: Roll, 1: Pass')
-    else:
-      logger.debug(', '.join([f'{i + 2}: {self.game._sums(move)}' for i, move in enumerate(self.game.moves) if self.game.moveValid[i]]))
